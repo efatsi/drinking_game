@@ -14,6 +14,7 @@
 		};
 
 		ws.onmessage = function(evt) {
+			console.log(evt);
 			if (evt.data == "pass") {
 				ws.send("more!");
 			}
@@ -28,5 +29,11 @@
 </head>
 <body>
 	<div id="debug"></div>
+	<div id="player1">Player 1:</div>
+	<div id="player2">Player 2:</div>
+	<div id="player3">Player 3:</div>
+	<div id="player4">Player 4:</div>
+	<div id="player5">Player 5:</div>
+	<div id="player6">Player 6:</div>
 </body>
 </html>

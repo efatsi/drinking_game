@@ -1,6 +1,6 @@
 require "serialport"
 
-port_str = "/dev/tty.usbmodem1421"
+port_str = "/dev/tty.usbmodem1411"
 baud_rate = 9600
 data_bits = 8
 stop_bits = 1
