@@ -14,7 +14,7 @@ def message(sp)
   string = sp.gets
   string.chop!
 
-  if string == "game_start"
+  if string.include?("game_start")
     return { "event" => "game_start" }
   end
 
@@ -61,7 +61,7 @@ def message(sp)
 end
 
 EventMachine::WebSocket.start(:host => "0.0.0.0", :port => 8080) do |ws|
-  ws.onopen    { ws.send "Hello Client!"}
+  ws.onopen    { ws.send "Hello!"}
   ws.onclose   { puts "WebSocket closed" }
   pass = true
   ws.onmessage do

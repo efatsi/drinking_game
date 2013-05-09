@@ -7,33 +7,92 @@
 
 		ws = new WebSocket("ws://localhost:8080");
 
-		ws.onclose = function() { debug("socket closed :("); };
+		ws.onclose = function() { };
 		ws.onopen = function() {
-			debug("connected...");
 			ws.send("hello server");
 		};
 
 		ws.onmessage = function(evt) {
-			console.log(evt);
-			if (evt.data == "pass") {
-				ws.send("more!");
+			console.log(evt.data)
+			if (evt.data == "pass" || evt.data == "Hello!") {
 			}
 			else {
-				$("#debug").append("<br />");
-				$("#debug").append(evt.data);
-				ws.send("more!");
+				data = JSON.parse(evt.data);
+
+				if (data.event == "game_start") {
+					$("#command").text("THE GAME HAS BEGUN");
+					$("#team1-score").html("");
+					$("#team2-score").html("");
+					$("#team3-score").html("");
+				}
+				else if (data.event == "round_start") {
+					$("#command").text("ROUND " + (parseInt(data.round) + 1) + " GO!!!!!")
+				}
+				else if (data.event == "round_results") {
+					var team1 = Math.round(parseFloat((data.individual_scores[0].score) + parseInt(data.individual_scores[1].score)) * 100) / 100
+					var team2 = Math.round(parseFloat((data.individual_scores[2].score) + parseInt(data.individual_scores[3].score)) * 100) / 100
+					var team3 = Math.round(parseFloat((data.individual_scores[4].score) + parseInt(data.individual_scores[5].score)) * 100) / 100
+					$("#command").text("ROUND " + (parseInt(data.round) + 1) + " OVER")
+					$("#team1-score").html(team1);
+					$("#team2-score").html(team2);
+					$("#team3-score").html(team3);
+				}
+				else if (data.event == "game_end") {
+					$("#command").text("GAME OVER. TEAM " + data.winning_team + " WINS!")
+				}
 			}
+			ws.send("more!")
 		};
 	});
 	</script>
+
+	<style>
+		ul {
+			list-style: none;
+		}
+		li {
+			float: left;
+			font-size: 50;
+			margin: 160px;
+			margin-top: 20px;
+			padding-top: 100px;
+			width: 200px;
+			text-align: center;
+		}
+
+		#command {
+			position: relative;
+			font-size: 75px;
+			color: midnightblue;
+			margin-left: auto;
+			margin-right: auto;
+			width: 950px;
+			top: 90px;
+			text-align: center;
+		}
+
+		#team1 {
+			color: blue;
+		}
+
+		#team2 {
+			color: green;
+		}
+
+		#team3 {
+			color: red;
+		}
+	</style>
 </head>
 <body>
 	<div id="debug"></div>
-	<div id="player1">Player 1:</div>
-	<div id="player2">Player 2:</div>
-	<div id="player3">Player 3:</div>
-	<div id="player4">Player 4:</div>
-	<div id="player5">Player 5:</div>
-	<div id="player6">Player 6:</div>
+	<ul>
+		<li id="team1">Team 1<br><span id="team1-score"></span></li>
+		<li id="team2">Team 2<br><span id="team2-score"></span></li>
+		<li id="team3">Team 3<br><span id="team3-score"></span></li>
+	</ul>
+
+
+	<div id="command"></div>
 </body>
 </html>
