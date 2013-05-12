@@ -63,7 +63,7 @@ end
 EventMachine::WebSocket.start(:host => "0.0.0.0", :port => 8080) do |ws|
   ws.onopen    { ws.send "Hello!"}
   ws.onclose   { puts "WebSocket closed" }
-  pass = true
+  pass = false
   ws.onmessage do
     if pass
       ws.send "pass"
